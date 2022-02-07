@@ -25,6 +25,6 @@ public class NumberReceiverFacade {
     }
 
     public Map<String, Set<Integer>> allNumbersFromUsers() {
-        return null;
+        return numberRepository.getAllNumbers();
     }
 }

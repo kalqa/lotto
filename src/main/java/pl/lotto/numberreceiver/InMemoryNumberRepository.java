@@ -12,4 +12,9 @@ class InMemoryNumberRepository implements NumberRepository {
     public void save(String hash, Set<Integer> userNumbers) {
         numbers.put(hash, userNumbers);
     }
+
+    @Override
+    public Map<String, Set<Integer>> getAllNumbers() {
+        return numbers;
+    }
 }

@@ -1,13 +1,7 @@
 package pl.lotto.resultchecker;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import pl.lotto.lottonumbergenerator.LottoNumberGeneratorFacade;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 
@@ -23,17 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 class ResultCheckerFacadeSpec {
 
-    final ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade();
-
-    @Mock
-    private NumberReceiverFacade numberReceiverFacade;
-
-    @Mock
-    private LottoNumberGeneratorFacade lottoNumberGenerator;
+    private final NumberReceiverFacade numberReceiverFacade =
+            mock(NumberReceiverFacade.class);
+    private final LottoNumberGeneratorFacade lottoNumberGenerator =
+            mock(LottoNumberGeneratorFacade.class);
+    ResultCheckerFacade resultCheckerFacade = new ResultCheckerFacade(
+            new InMemoryWinnersRepository(),
+            numberReceiverFacade,
+            lottoNumberGenerator);
 
     Map<String, Set<Integer>> usersNumbers = new HashMap<>() {{
         put("hash1", Set.of(1, 2, 3, 4, 5, 6));
@@ -41,7 +34,6 @@ class ResultCheckerFacadeSpec {
         put("hash3", Set.of(1, 2, 3, 4, 5, 7));
         put("hash4", Set.of(1, 2, 3, 4, 5, 8));
     }};
-
 
     @Test
     @DisplayName("module should give a list of 2 winners")
@@ -54,7 +46,8 @@ class ResultCheckerFacadeSpec {
                 .willReturn(winningNumbers);
 
         // when
-        Map<String, Set<Integer>> winners = resultCheckerFacade.checkResult(usersNumbers, winningNumbers);
+        resultCheckerFacade.checkResult();
+        Map<String, Set<Integer>> winners = resultCheckerFacade.getResults();
 
         // then
         assertAll(
@@ -76,7 +69,8 @@ class ResultCheckerFacadeSpec {
                 .willReturn(winningNumbers);
 
         // when
-        Map<String, Set<Integer>> winners = resultCheckerFacade.checkResult(usersNumbers, winningNumbers);
+        resultCheckerFacade.checkResult();
+        Map<String, Set<Integer>> winners = resultCheckerFacade.getResults();
 
         // then
         assertAll(
