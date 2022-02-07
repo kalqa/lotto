@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import pl.lotto.lottonumbergenerator.LottoNumberGeneratorFacade;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 
@@ -21,12 +23,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class ResultCheckerFacadeSpec {
 
     final ResultCheckerFacade resultCheckerFacade = new ResultCheckerConfiguration().resultCheckerFacade();
 
-    private NumberReceiverFacade numberReceiverFacade = mock(NumberReceiverFacade.class);
-    private LottoNumberGeneratorFacade lottoNumberGenerator = mock(LottoNumberGeneratorFacade.class);
+    @Mock
+    private NumberReceiverFacade numberReceiverFacade;
+
+    @Mock
+    private LottoNumberGeneratorFacade lottoNumberGenerator;
 
     Map<String, Set<Integer>> usersNumbers = new HashMap<>() {{
         put("hash1", Set.of(1, 2, 3, 4, 5, 6));
