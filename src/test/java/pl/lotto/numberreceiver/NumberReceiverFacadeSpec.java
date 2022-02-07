@@ -7,8 +7,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class NumberReceiverFacadeSpec {
 
-    NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade();
-    String SOME_HASH = "hash";
+    final NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade();
+    final String SOME_HASH = "hash";
 
     @Test
     @DisplayName("module should accept when user gave exactly 6 numbers in range")
@@ -28,7 +28,7 @@ class NumberReceiverFacadeSpec {
         ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5));
 
         // then
-        ResultMessage not_accepted = new ResultMessage("Not accepted", SOME_HASH);
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
         assertThat(result).isEqualTo(not_accepted);
     }
 
@@ -39,7 +39,7 @@ class NumberReceiverFacadeSpec {
         ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6, 7));
 
         // then
-        ResultMessage not_accepted = new ResultMessage("Not accepted", SOME_HASH);
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
         assertThat(result).isEqualTo(not_accepted);
     }
 
@@ -50,7 +50,7 @@ class NumberReceiverFacadeSpec {
         ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 100));
 
         // then
-        ResultMessage not_accepted = new ResultMessage("Not accepted", SOME_HASH);
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
         assertThat(result).isEqualTo(not_accepted);
     }
 }

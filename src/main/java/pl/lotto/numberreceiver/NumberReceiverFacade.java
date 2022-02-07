@@ -1,21 +1,30 @@
 package pl.lotto.numberreceiver;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class NumberReceiverFacade {
 
-    private final NumberValidator numbersValidator;
+    private final NumberValidator numberValidator;
+    private final NumberRepository numberRepository;
 
-    public NumberReceiverFacade(NumberValidator numbersValidator) {
-        this.numbersValidator = numbersValidator;
+    public NumberReceiverFacade(NumberValidator numbersValidator, NumberRepository numberRepository) {
+        this.numberValidator = numbersValidator;
+        this.numberRepository = numberRepository;
     }
 
     public ResultMessage inputNumbers(Set<Integer> numbers) {
-        if (numbersValidator.numbersAreValid(numbers)) {
-            // mapa <- "hash lsoowy" to "Set<Integer>"
-            return new ResultMessage("Accepted", "hash");
+        if (numberValidator.numbersAreValid(numbers)) {
+            String hash = UUID.randomUUID().toString();
+            numberRepository.save(hash, numbers);
+            return new ResultMessage("Accepted", hash);
         } else {
-            return new ResultMessage("Not accepted", "hash");
+            return new ResultMessage("Not accepted", "False");
         }
+    }
+
+    public Map<String, Set<Integer>> allNumbersFromUsers() {
+        return null;
     }
 }
