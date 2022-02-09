@@ -6,8 +6,8 @@ import pl.lotto.numberreceiver.NumberReceiverConfiguration;
 public class ResultCheckerConfiguration {
 
     public ResultCheckerFacade resultCheckerFacade() {
-        return new ResultCheckerFacade(
-                new InMemoryWinnersRepository(),
+        //return ResultCheckerFacade.getInstance();
+        return new ResultCheckerFacade(new InMemoryWinnersRepository(),
                 new NumberReceiverConfiguration().numberReceiverFacade(),
                 new LottoNumberGeneratorConfiguration().lottoNumberGeneratorFacade());
     }

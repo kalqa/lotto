@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class NumberReceiverFacade {
 
+    //private static NumberReceiverFacade instance;
     private final NumberValidator numberValidator;
     private final NumberRepository numberRepository;
 
@@ -16,12 +17,19 @@ public class NumberReceiverFacade {
         this.numberRepository = numberRepository;
     }
 
+    /*public static NumberReceiverFacade getInstance() {
+        if (instance == null) {
+            instance = new NumberReceiverFacade(new NumberValidatorImpl(), new InMemoryNumberRepository());
+        }
+        return instance;
+    }*/
+
     public ResultMessage inputNumbers(Set<Integer> numbers) {
         if (numberValidator.numbersAreValid(numbers)) {
             String hash = UUID.randomUUID().toString();
             TreeSet<Integer> sortedNumbers = new TreeSet<>(numbers);
             numberRepository.save(hash, sortedNumbers);
-            return new ResultMessage("Accepted", "hash");
+            return new ResultMessage("Accepted", hash);
         } else {
             return new ResultMessage("Not accepted", "False");
         }

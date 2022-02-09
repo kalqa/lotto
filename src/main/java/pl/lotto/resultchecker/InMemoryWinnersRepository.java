@@ -1,20 +1,21 @@
 package pl.lotto.resultchecker;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 class InMemoryWinnersRepository implements WinnersRepository {
 
-    private Map<String, Set<Integer>> numbers = new HashMap<>();
+    private Set<String> winners = new HashSet<>();
 
     @Override
-    public void saveWinners(Map<String, Set<Integer>> numbers) {
-        this.numbers = numbers;
+    public void saveWinners(Set<String> winners) {
+        this.winners = winners;
     }
 
     @Override
-    public Map<String, Set<Integer>> getAllNumbers() {
-        return numbers;
+    public Set<String> getAllWinners() {
+        return winners;
     }
 }

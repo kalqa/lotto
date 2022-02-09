@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -47,14 +46,12 @@ class ResultCheckerFacadeSpec {
 
         // when
         resultCheckerFacade.checkResult();
-        Map<String, Set<Integer>> winners = resultCheckerFacade.getResults();
+        Set<String> winners = resultCheckerFacade.getWinners();
 
         // then
         assertAll(
                 () -> assertEquals(2, winners.size())
-                //() -> assertThat(winners, hasKey("hash1")),
-                //() -> assertThat(winners.keySet(), contains("hash1")),
-                //() -> assertThat(winners, hasValue(Set.of(1, 2, 3, 4, 5, 6)))
+                //() -> assertThat(winners, containsInAnyOrder("hash1", "hash2"))
         );
     }
 
@@ -70,14 +67,13 @@ class ResultCheckerFacadeSpec {
 
         // when
         resultCheckerFacade.checkResult();
-        Map<String, Set<Integer>> winners = resultCheckerFacade.getResults();
+        Set<String> winners = resultCheckerFacade.getWinners();
 
         // then
         assertAll(
                 () -> assertEquals(0, winners.size())
-                //() -> assertThat(winners, hasKey("hash1")),
-                //() -> assertThat(winners.keySet(), contains("hash1")),
-                //() -> assertThat(winners, hasValue(Set.of(1, 2, 3, 4, 5, 6)))
+                //() -> assertThat(winners, empty())
+                //() -> assertThat(winners, not(containsInAnyOrder("hash1", "hash2", "hash3", "hash4")))
         );
     }
 }
