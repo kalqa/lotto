@@ -1,34 +1,59 @@
 package pl.lotto.numberreceiver;
 
+import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class NumberReceiverFacadeSpec {
 
-    NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade();
+    final NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
+            .numberReceiverFacade(new NumberValidatorImpl(), new InMemoryNumberRepository());
 
     @Test
-    @DisplayName("should receive 6 numbers and return they are accepted")
-    public void a() {
+    @DisplayName("module should accept when user gave exactly 6 numbers in range")
+    public void receive_six_numbers_and_return_they_are_accepted() {
         // when
-        ResultMessageDto result = numberReceiverFacade.inputNumbers(asList(1, 2, 3, 4, 5, 6));
+        ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6));
+        final String SOME_HASH = result.getHash();
 
         // then
-        ResultMessageDto not_good_job = new ResultMessageDto("all good", "jaamn");
-        assertThat(result).isEqualTo(not_good_job);
+        ResultMessage accepted = new ResultMessage("Accepted", SOME_HASH);
+        assertThat(result, equalTo(accepted));
     }
 
     @Test
-    @DisplayName("should receive 6 numbers and return they are falsed")
-    public void ba() {
+    @DisplayName("module should not accept when user gave less than 6 numbers")
+    public void receive_5_numbers_and_return_they_are_falsed() {
         // when
-        ResultMessageDto result = numberReceiverFacade.inputNumbers(asList(1, 2, 3, 4, 5));
+        ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5));
 
         // then
-        ResultMessageDto not_good_job = new ResultMessageDto("not good", "jaamn");
-        assertThat(result).isEqualTo(not_good_job);
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
+        assertThat(result, equalTo(not_accepted));
     }
 
+    @Test
+    @DisplayName("module should not accept when user gave more than 6 numbers")
+    public void receive_7_numbers_and_return_they_are_falsed() {
+        // when
+        ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6, 7));
+
+        // then
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
+        assertThat(result, equalTo(not_accepted));
+    }
+
+    @Test
+    @DisplayName("module should not accept when user gave number out of range")
+    public void receive_6_numbers_out_of_range_and_return_they_are_falsed() {
+        // when
+        ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 100));
+
+        // then
+        ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
+        assertThat(result, equalTo(not_accepted));
+    }
 }
