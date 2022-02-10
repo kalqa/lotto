@@ -1,6 +1,5 @@
 package pl.lotto.numberreceiver;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -8,21 +7,19 @@ import java.util.UUID;
 
 public class NumberReceiverFacade {
 
-    //private static NumberReceiverFacade instance;
+    private static NumberReceiverFacade instance;
     private final NumberValidator numberValidator;
     private final NumberRepository numberRepository;
 
-    public NumberReceiverFacade(NumberValidator numbersValidator, NumberRepository numberRepository) {
+    NumberReceiverFacade(NumberValidator numbersValidator, NumberRepository numberRepository) {
         this.numberValidator = numbersValidator;
         this.numberRepository = numberRepository;
+        instance = this;
     }
 
-    /*public static NumberReceiverFacade getInstance() {
-        if (instance == null) {
-            instance = new NumberReceiverFacade(new NumberValidatorImpl(), new InMemoryNumberRepository());
-        }
+    public static NumberReceiverFacade getInstance() {
         return instance;
-    }*/
+    }
 
     public ResultMessage inputNumbers(Set<Integer> numbers) {
         if (numberValidator.numbersAreValid(numbers)) {

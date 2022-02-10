@@ -31,7 +31,7 @@ class ResultAnnouncerFacadeSpec {
         String win_message = resultAnnouncerFacade.checkResult("hash1");
 
         //then
-        assertEquals("Zwycięzca", win_message);
+        assertEquals("Winner", win_message);
     }
 
     @Test
@@ -44,7 +44,7 @@ class ResultAnnouncerFacadeSpec {
         String lost_message = resultAnnouncerFacade.checkResult("hash50");
 
         //then
-        assertEquals("Przegrany", lost_message);
+        assertEquals("Loser", lost_message);
     }
 
 }

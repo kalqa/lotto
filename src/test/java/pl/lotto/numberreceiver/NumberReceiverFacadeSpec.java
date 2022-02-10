@@ -3,22 +3,25 @@ package pl.lotto.numberreceiver;
 import java.util.Set;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 class NumberReceiverFacadeSpec {
 
-    final NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration().numberReceiverFacade();
-    final String SOME_HASH = "hash";
+    final NumberReceiverFacade numberReceiverFacade = new NumberReceiverConfiguration()
+            .numberReceiverFacade(new NumberValidatorImpl(), new InMemoryNumberRepository());
 
     @Test
     @DisplayName("module should accept when user gave exactly 6 numbers in range")
     public void receive_six_numbers_and_return_they_are_accepted() {
         // when
         ResultMessage result = numberReceiverFacade.inputNumbers(Set.of(1, 2, 3, 4, 5, 6));
+        final String SOME_HASH = result.getHash();
 
         // then
         ResultMessage accepted = new ResultMessage("Accepted", SOME_HASH);
-        assertThat(result).isEqualTo(accepted);
+        assertThat(result, equalTo(accepted));
     }
 
     @Test
@@ -29,7 +32,7 @@ class NumberReceiverFacadeSpec {
 
         // then
         ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
-        assertThat(result).isEqualTo(not_accepted);
+        assertThat(result, equalTo(not_accepted));
     }
 
     @Test
@@ -40,7 +43,7 @@ class NumberReceiverFacadeSpec {
 
         // then
         ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
-        assertThat(result).isEqualTo(not_accepted);
+        assertThat(result, equalTo(not_accepted));
     }
 
     @Test
@@ -51,6 +54,6 @@ class NumberReceiverFacadeSpec {
 
         // then
         ResultMessage not_accepted = new ResultMessage("Not accepted", "False");
-        assertThat(result).isEqualTo(not_accepted);
+        assertThat(result, equalTo(not_accepted));
     }
 }
