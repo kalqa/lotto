@@ -10,7 +10,7 @@ import static pl.lotto.configuration.GameConfiguration.RANDOM_NUMBER_BOUND;
 public class LottoNumberGeneratorFacade {
 
     public Set<Integer> winningNumbers() {
-        Set<Integer> winningNumbers = new TreeSet<>(Set.of(1,2,3,4,5,6));
+        Set<Integer> winningNumbers = new TreeSet<>();
         while (winningNumbers.size() < AMOUNT_OF_NUMBERS) {
             int randomNumber = (int) (Math.random() * RANDOM_NUMBER_BOUND) + LOWEST_NUMBER;
             winningNumbers.add(randomNumber);

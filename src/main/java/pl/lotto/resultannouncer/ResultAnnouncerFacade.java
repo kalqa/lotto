@@ -2,9 +2,7 @@ package pl.lotto.resultannouncer;
 
 import pl.lotto.resultchecker.ResultCheckerFacade;
 
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class ResultAnnouncerFacade {
 
@@ -15,7 +13,8 @@ public class ResultAnnouncerFacade {
     }
 
     public String checkResult(String hash) {
+        resultCheckerFacade.checkWinners();
         Set<String> winners = resultCheckerFacade.getWinners();
-        return winners.stream().anyMatch(e -> e.equals(hash)) ? "Zwycięzca" : "Przegrany";
+        return winners.stream().anyMatch(e -> e.equals(hash)) ? "Winner" : "Loser";
     }
 }

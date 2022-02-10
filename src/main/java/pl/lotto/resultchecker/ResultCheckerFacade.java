@@ -1,8 +1,6 @@
 package pl.lotto.resultchecker;
 
-import pl.lotto.lottonumbergenerator.LottoNumberGeneratorConfiguration;
 import pl.lotto.lottonumbergenerator.LottoNumberGeneratorFacade;
-import pl.lotto.numberreceiver.NumberReceiverConfiguration;
 import pl.lotto.numberreceiver.NumberReceiverFacade;
 
 import java.util.HashSet;
@@ -11,36 +9,32 @@ import java.util.Set;
 
 public class ResultCheckerFacade {
 
-    //private static ResultCheckerFacade instance;
+    private static ResultCheckerFacade instance;
     private final WinnersRepository winnersRepository;
     private final NumberReceiverFacade numberReceiverFacade;
-    private final LottoNumberGeneratorFacade lottoNumberGenerator;
+    private final LottoNumberGeneratorFacade lottoNumberGeneratorFacade;
 
-    public ResultCheckerFacade(WinnersRepository winnersRepository,
+    ResultCheckerFacade(WinnersRepository winnersRepository,
                                 NumberReceiverFacade numberReceiverFacade,
-                                LottoNumberGeneratorFacade lottoNumberGenerator) {
+                                LottoNumberGeneratorFacade lottoNumberGeneratorFacade) {
         this.winnersRepository = winnersRepository;
         this.numberReceiverFacade = numberReceiverFacade;
-        this.lottoNumberGenerator = lottoNumberGenerator;
+        this.lottoNumberGeneratorFacade = lottoNumberGeneratorFacade;
+        instance = this;
     }
 
-    /*public static ResultCheckerFacade getInstance() {
-        if (instance == null) {
-            instance = new ResultCheckerFacade(
-                    new InMemoryWinnersRepository(),
-                    new NumberReceiverConfiguration().numberReceiverFacade(),
-                    new LottoNumberGeneratorConfiguration().lottoNumberGeneratorFacade());
-        }
+    public static ResultCheckerFacade getInstance() {
         return instance;
-    }*/
+    }
 
     public Set<String> getWinners() {
         return winnersRepository.getAllWinners();
     }
 
-    public void checkResult() {
+    public void checkWinners() {
         Map<String, Set<Integer>> usersNumbers = numberReceiverFacade.allNumbersFromUsers();
-        Set<Integer> winningNumbers = lottoNumberGenerator.winningNumbers();
+        Set<Integer> winningNumbers = lottoNumberGeneratorFacade.winningNumbers();
+        System.out.println("Wewnątrz implementacji metody checkWinners(): " + lottoNumberGeneratorFacade.winningNumbers());
         Set<String> winners = new HashSet<>();
         usersNumbers.forEach((key, value) -> {
             if (value.equals(winningNumbers)) winners.add(key);
